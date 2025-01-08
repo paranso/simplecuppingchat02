@@ -23,21 +23,24 @@
   color: #333;
 }
 
-/* 날짜 2개를 가로로 강제로 배치: flex-wrap: nowrap */
+/* 날짜 행 컨테이너 */
 .date-row {
   display: flex;
-  flex-wrap: nowrap; 
-  gap: 10px;
+  justify-content: space-between; /* 균등한 간격 배치 */
+  gap: 20px; /* 두 입력 박스 사이 간격 */
+  margin-bottom: 15px;
 }
 
-/* 두 입력 박스가 한 줄에 들어올 수 있도록 폭 제한 */
+/* 날짜 입력 그룹 */
 .date-row .input-group {
-  flex: 0 0 auto; 
+  flex: 1; /* 동일한 너비로 확장 */
+  max-width: calc(50% - 10px); /* 전체 너비의 절반에서 gap의 절반을 뺀 값 */
 }
 
-/* 날짜 input 폭을 작게 설정해 무조건 한 줄에 들어가도록 유도 */
+/* 날짜 input 스타일 */
 .date-row input[type="date"] {
-  max-width: 120px;
+  width: 100%; /* 부모 너비에 맞춤 */
+  max-width: none; /* 이전 제한 해제 */
 }
 
 /* label과 input 간 기본 스타일 */
