@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>간단 커핑 앱</title>
+  <!-- 인라인 스타일: 필요 시 별도 style.css로 분리해도 됩니다 -->
+  <style>
+    /* 컨테이너 기본 스타일 */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+
+    /* 각 항목 구역 스타일 (테두리와 여백) */
+    .cupping-section {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+
+    /* 제목들 조금 더 강조 */
+    .cupping-section h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    /* 날짜 2개를 가로로 강제로 배치: flex + nowrap */
+    .date-row {
+      display: flex;
+      flex-wrap: nowrap; /* 줄바꿈 없애기 */
+      gap: 10px;
+    }
+
+    /* 날짜 input 그룹 폭 지정 */
+    .date-row .input-group {
+      flex: 0 0 auto; /* 내용 길이에 맞게 영역 고정 */
+    }
+
+    /* label과 input 정렬 및 간격 */
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* 텍스트/날짜 입력 공통 스타일 */
+    input[type="text"],
+    input[type="date"] {
+      display: block;
+      width: 100%;
+      height: 40px;
+      padding: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* 날짜 input을 좀 더 좁게(max-width) 설정해 모바일에서도 한 줄에 들어가도록 유도 */
+    .date-row input[type="date"] {
+      max-width: 120px; /* 필요에 따라 값 조절 */
+    }
+
+    /* 체크박스/라디오 영역 */
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    /* 4번, 5번 textarea 높이: 여러 줄 입력 가능하도록 설정 */
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 6em; /* 대략 4줄 이상 */
+      padding: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical; /* 사용자 드래그로 세로 크기 조절 가능 */
+      overflow-y: auto;
+    }
+
+    /* 저장 버튼 스타일 */
+    #save-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    #save-button:hover {
+      background-color: #45a049;
+    }
+
+    /* 결과 표시 영역 */
+    #result-area {
+      margin-top: 20px;
+    }
+    #result-display {
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 4px;
+      font-family: monospace;
+      min-height: 120px; 
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>simple cupping form</h1>
+
+    <!-- (0) 기본 정보 입력 -->
+    <div class="cupping-section">
+      <h2>기본 정보 입력</h2>
+      <div class="date-row">
+        <div class="input-group">
+          <label for="roasting-date">로스팅 날짜</label>
+          <input type="date" id="roasting-date"/>
+        </div>
+        <div class="input-group">
+          <label for="cupping-date">커핑 날짜</label>
+          <input type="date" id="cupping-date"/>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="coffee-name">커피 이름</label>
+        <input type="text" id="coffee-name" placeholder="예) 에티오피아 예가체프"/>
+      </div>
+    </div>
+
+    <!-- (1) 향 맡기 -->
+    <div class="cupping-section">
+      <h2>1. 향 맡기</h2>
+      <p>분쇄된 원두의 향을 맡고 느껴지는 향을 선택하거나 적어보세요.</p>
+      <div class="input-group">
+        <label>향 선택 (선택)</label>
+        <div class="options">
+          <label><input type="checkbox" value="꽃향" /> 꽃향</label>
+          <label><input type="checkbox" value="과일향" /> 과일향</label>
+          <label><input type="checkbox" value="견과류향" /> 견과류향</label>
+          <label><input type="checkbox" value="초콜릿향" /> 초콜릿향</label>
+          <label><input type="checkbox" value="기타향" /> 기타향</label>
+        </div>
+        <input type="text" id="aroma-text" placeholder="기타 향을 직접 적어주세요" />
+      </div>
+    </div>
+
+    <!-- (2) 맛보기 -->
+    <div class="cupping-section">
+      <h2>2. 맛보기</h2>
+      <p>커피를 맛보고 느껴지는 맛을 선택하거나 적어보세요.</p>
+      <div class="input-group">
+        <label>맛 선택 (선택)</label>
+        <div class="options">
+          <label><input type="checkbox" value="단맛" /> 단맛</label>
+          <label><input type="checkbox" value="산미" /> 산미</label>
+          <label><input type="checkbox" value="쓴맛" /> 쓴맛</label>
+          <label><input type="checkbox" value="기타맛" /> 기타맛</label>
+        </div>
+        <input type="text" id="taste-text" placeholder="기타 맛을 직접 적어주세요" />
+      </div>
+    </div>
+
+    <!-- (3) 전체적인 느낌 -->
+    <div class="cupping-section">
+      <h2>3. 전체적인 느낌</h2>
+      <p>커피의 전체적인 느낌을 선택하거나 적어보세요.</p>
+      <div class="input-group">
+        <label>느낌 선택 (선택)</label>
+        <div class="options">
+          <label><input type="checkbox" value="부드러움" /> 부드러움</label>
+          <label><input type="checkbox" value="묵직함" /> 묵직함</label>
+          <label><input type="checkbox" value="깔끔함" /> 깔끔함</label>
+          <label><input type="checkbox" value="씁쓸함" /> 씁쓸함</label>
+          <label><input type="checkbox" value="달콤함" /> 달콤함</label>
+          <label><input type="checkbox" value="상큼함" /> 상큼함</label>
+          <label><input type="checkbox" value="기타느낌" /> 기타느낌</label>
+        </div>
+        <input type="text" id="feel-text" placeholder="기타 느낌을 직접 적어주세요" />
+      </div>
+    </div>
+
+    <!-- (4) 추가 메모 -->
+    <div class="cupping-section">
+      <h2>4. 추가 메모</h2>
+      <p>추가로 기록해두고 싶은 내용이 있다면 적어보세요.</p>
+      <div class="input-group">
+        <label for="additional-note">추가 메모</label>
+        <textarea
+          id="additional-note"
+          placeholder="(예) 숙성 시간, 물 온도"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- (5) 로스팅 추천 방향 -->
+    <div class="cupping-section">
+      <h2>5. 로스팅 추천 방향</h2>
+      <p>이번에 맛본 커피를 바탕으로, 향후 로스팅에 대한 아이디어나 조정 방향을 적어보세요.</p>
+      <div class="input-group">
+        <label for="roasting-recommendation">로스팅 추천</label>
+        <textarea
+          id="roasting-recommendation"
+          placeholder="(예) 더 라이트하게 혹은 더 다크하게"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- 결과 저장 버튼 및 결과 영역 -->
+    <button id="save-button">결과 저장</button>
+    <div id="result-area">
+      <pre id="result-display"></pre>
+    </div>
+  </div>
+
+  <!-- app.js 스크립트 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 버튼 및 출력 영역
+      const saveButton = document.getElementById('save-button');
+      const resultDisplay = document.getElementById('result-display');
+
+      // 0. 기본 정보
+      const roastingDateInput = document.getElementById('roasting-date');
+      const cuppingDateInput = document.getElementById('cupping-date');
+      const coffeeNameInput = document.getElementById('coffee-name');
+
+      // 1. 향 맡기
+      const aromaText = document.getElementById('aroma-text');
+
+      // 2. 맛보기
+      const tasteText = document.getElementById('taste-text');
+
+      // 3. 전체적인 느낌
+      const feelText = document.getElementById('feel-text');
+
+      // 4. 추가 메모
+      const additionalNote = document.getElementById('additional-note');
+
+      // 5. 로스팅 추천 방향
+      const roastingRecommendation = document.getElementById('roasting-recommendation');
+
+      saveButton.addEventListener('click', function () {
+        // (0) 기본 정보
+        const roastingDateValue = roastingDateInput.value;
+        const cuppingDateValue = cuppingDateInput.value;
+        const coffeeNameValue = coffeeNameInput.value.trim();
+
+        // (1) 향 맡기 (체크박스)
+        const aromaChoices = Array.from(
+          document.querySelectorAll('.cupping-section:nth-child(2) input[type="checkbox"]:checked')
+        ).map(checkbox => checkbox.value);
+        const aromaCustomText = aromaText.value.trim();
+
+        // (2) 맛보기 (체크박스)
+        const tasteChoices = Array.from(
+          document.querySelectorAll('.cupping-section:nth-child(3) input[type="checkbox"]:checked')
+        ).map(checkbox => checkbox.value);
+        const tasteCustomText = tasteText.value.trim();
+
+        // (3) 전체적인 느낌 (체크박스)
+        const feelChoices = Array.from(
+          document.querySelectorAll('.cupping-section:nth-child(4) input[type="checkbox"]:checked')
+        ).map(checkbox => checkbox.value);
+        const feelCustomText = feelText.value.trim();
+
+        // (4) 추가 메모
+        const additionalNoteValue = additionalNote.value.trim();
+
+        // (5) 로스팅 추천 방향
+        const roastingRecValue = roastingRecommendation.value.trim();
+
+        // ======= 결과 출력 준비 =======
+        let basicInfoOutput = `
+[기본 정보]
+- 로스팅 날짜: ${roastingDateValue || '미입력'}
+- 커핑 날짜: ${cuppingDateValue || '미입력'}
+- 커피 이름: ${coffeeNameValue || '미입력'}
+`;
+
+        // 향
+        let aromaOutput = '';
+        if (aromaChoices.length > 0) {
+          aromaOutput += `선택 향: ${aromaChoices.join(', ')}`;
+        }
+        if (aromaCustomText) {
+          aromaOutput += aromaOutput ? `, 기타 향: ${aromaCustomText}` : `기타 향: ${aromaCustomText}`;
+        }
+        if (!aromaOutput) {
+          aromaOutput = '선택없음';
+        }
+
+        // 맛
+        let tasteOutput = '';
+        if (tasteChoices.length > 0) {
+          tasteOutput += `선택 맛: ${tasteChoices.join(', ')}`;
+        }
+        if (tasteCustomText) {
+          tasteOutput += tasteOutput ? `, 기타 맛: ${tasteCustomText}` : `기타 맛: ${tasteCustomText}`;
+        }
+        if (!tasteOutput) {
+          tasteOutput = '선택없음';
+        }
+
+        // 전체적인 느낌
+        let feelOutput = '';
+        if (feelChoices.length > 0) {
+          feelOutput += `느낌: ${feelChoices.join(', ')}`;
+        }
+        if (feelCustomText) {
+          feelOutput += feelOutput ? `, 기타 느낌: ${feelCustomText}` : `기타 느낌: ${feelCustomText}`;
+        }
+        if (!feelOutput) {
+          feelOutput = '선택없음';
+        }
+
+        // 추가 메모
+        let additionalNoteOutput = additionalNoteValue || '추가 메모 없음';
+
+        // 로스팅 추천
+        let roastingRecOutput = roastingRecValue || '로스팅 관련 메모 없음';
+
+        let outputString = `
+${basicInfoOutput}
+
+[1. 향 맡기]
+  ${aromaOutput}
+
+[2. 맛보기]
+  ${tasteOutput}
+
+[3. 전체적인 느낌]
+  ${feelOutput}
+
+[4. 추가 메모]
+  ${additionalNoteOutput}
+
+[5. 로스팅 추천 방향]
+  ${roastingRecOutput}
+        `;
+
+        resultDisplay.textContent = outputString.trim();
+      });
+    });
+  </script>
+</body>
+</html>

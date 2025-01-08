@@ -1,0 +1,122 @@
+/* 컨테이너 기본 스타일 */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+/* 각 항목 구역 스타일 (테두리와 여백) */
+.cupping-section {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+/* 날짜 2개를 가로로 강제로 배치: flex-wrap: nowrap */
+.date-row {
+  display: flex;
+  flex-wrap: nowrap; 
+  gap: 10px;
+}
+
+/* 두 입력 박스가 한 줄에 들어올 수 있도록 폭 제한 */
+.date-row .input-group {
+  /* flex: 1; 로 하면 한 줄에 못 들어갈 수도 있으므로 명시적으로 폭을 줄이거나 아래처럼 처리 */
+  flex: 0 0 auto; 
+}
+
+/* 날짜 input 폭을 작게 설정해 무조건 한 줄에 들어가도록 유도 */
+.date-row .input-group input[type="date"] {
+  max-width: 120px; /* 필요에 따라 100~150px로 조절 */
+}
+
+/* label과 input 간 기본 스타일 */
+.input-group {
+  margin-bottom: 15px;
+}
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* 텍스트, 날짜 입력 */
+input[type="text"],
+input[type="date"] {
+  display: block;
+  width: 100%; /* date-row에서는 max-width가 제한하므로 실제 폭은 작아짐 */
+  height: 40px;
+  padding: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* textarea는 여러 줄 입력 가능하므로 min-height 등 설정 */
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 6em;
+  padding: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+/* 저장 버튼 */
+#save-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+#save-button:hover {
+  background-color: #45a049;
+}
+
+/* 결과 표시 영역 */
+#result-area {
+  margin-top: 20px;
+}
+#result-display {
+  white-space: pre-wrap;
+  border: 1px solid #ccc;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 4px;
+  font-family: monospace;
+  min-height: 120px; 
+  font-size: 1rem;
+}
+
+/* -----------------------
+   (옵션) 미디어 쿼리 예시 
+   -----------------------
+   만약 화면이 더 작아지면(예: 400px 이하)
+   두 날짜를 한 줄에 넣기 어려울 수 있으므로
+   wrap을 허용할 수도 있음. 
+   화면이 정말 작아도 무조건 옆으로 두길 원하면
+   아래 코드는 빼세요.
+*/
+/*
+@media (max-width: 400px) {
+  .date-row {
+    flex-wrap: wrap; 
+  }
+  .date-row .input-group {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+*/
