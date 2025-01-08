@@ -129,6 +129,7 @@ textarea {
   align-items: center;
   gap: 10px;
   margin-top: 5px;
+  width: 100%; /* 컨테이너 전체 너비 사용 */
 }
 
 .rating-slider-container {
@@ -137,12 +138,14 @@ textarea {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: calc(100% - 100px); /* 전체 너비에서 양쪽 라벨 너비 뺀 만큼 사용 */
 }
 
 .rating-label {
   font-size: 0.9rem;
   color: #666;
-  width: 40px;
+  width: 50px; /* 라벨 너비 조정 */
+  text-align: center; /* 텍스트 중앙 정렬 */
 }
 
 .rating-value {
@@ -154,6 +157,7 @@ textarea {
 
 /* 레인지 슬라이더 스타일링 */
 input[type="range"] {
+  width: 100%;
   flex: 1;
   height: 4px;
   background: #ddd;
