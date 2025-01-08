@@ -28,6 +28,21 @@ document.addEventListener('DOMContentLoaded', function () {
   // 5. 로스팅 추천
   const roastingRecommendation = document.getElementById('roasting-recommendation');
 
+  // 평가 바 값 실시간 업데이트 설정
+  function setupRatingDisplay(ratingInput) {
+    const valueDisplay = ratingInput.nextElementSibling;
+    valueDisplay.textContent = ratingInput.value;
+    
+    ratingInput.addEventListener('input', function() {
+      valueDisplay.textContent = this.value;
+    });
+  }
+
+  // 각 평가 바에 실시간 업데이트 적용
+  setupRatingDisplay(aromaRating);
+  setupRatingDisplay(tasteRating);
+  setupRatingDisplay(overallRating);
+
   saveButton.addEventListener('click', function () {
     // 0. 기본 정보
     const roastingDateValue = roastingDateInput.value;
@@ -70,77 +85,60 @@ document.addEventListener('DOMContentLoaded', function () {
 - 커핑 날짜: ${cuppingDateValue || '미입력'}
 - 커피 이름: ${coffeeNameValue || '미입력'}
 - 배출온도/시간: ${dropTempValue || '미입력'}
-- Agtron#: ${agtronValue || '미입력'}
-`;
+- Agtron#: ${agtronValue || '미입력'}`;
 
     // 향 출력
-    let aromaOutput = `강도: ${aromaRatingValue}/5점\n  `;
+    let aromaOutput = '';
     if (aromaChoices.length > 0) {
       aromaOutput += `선택 향: ${aromaChoices.join(', ')}`;
     }
-    if (aromaCustomText !== '') {
-      if (aromaOutput !== '') {
-        aromaOutput += `, 기타 향: ${aromaCustomText}`;
-      } else {
-        aromaOutput += `기타 향: ${aromaCustomText}`;
-      }
+    if (aromaCustomText) {
+      aromaOutput += aromaOutput ? `, 기타 향: ${aromaCustomText}` : `기타 향: ${aromaCustomText}`;
     }
-    if (aromaOutput === '') {
+    if (!aromaOutput) {
       aromaOutput = '선택없음';
     }
 
     // 맛 출력
-    let tasteOutput = `강도: ${tasteRatingValue}/5점\n  `;
+    let tasteOutput = '';
     if (tasteChoices.length > 0) {
       tasteOutput += `선택 맛: ${tasteChoices.join(', ')}`;
     }
-    if (tasteCustomText !== '') {
-      if (tasteOutput !== '') {
-        tasteOutput += `, 기타 맛: ${tasteCustomText}`;
-      } else {
-        tasteOutput += `기타 맛: ${tasteCustomText}`;
-      }
+    if (tasteCustomText) {
+      tasteOutput += tasteOutput ? `, 기타 맛: ${tasteCustomText}` : `기타 맛: ${tasteCustomText}`;
     }
-    if (tasteOutput === '') {
+    if (!tasteOutput) {
       tasteOutput = '선택없음';
     }
 
     // 전체적인 느낌 출력
-    let feelOutput = `강도: ${overallRatingValue}/5점\n  `;
+    let feelOutput = '';
     if (feelChoices.length > 0) {
       feelOutput += `느낌: ${feelChoices.join(', ')}`;
     }
-    if (feelCustomText !== '') {
-      if (feelOutput !== '') {
-        feelOutput += `, 기타 느낌: ${feelCustomText}`;
-      } else {
-        feelOutput += `기타 느낌: ${feelCustomText}`;
-      }
+    if (feelCustomText) {
+      feelOutput += feelOutput ? `, 기타 느낌: ${feelCustomText}` : `기타 느낌: ${feelCustomText}`;
     }
-    if (feelOutput === '') {
+    if (!feelOutput) {
       feelOutput = '선택없음';
     }
 
-    let additionalNoteOutput = additionalNoteValue || '추가 메모 없음';
-    let roastingRecOutput = roastingRecValue || '특별히 적을 내용 없음';
+    let outputString = `${basicInfoOutput}
 
-    let outputString = `
-${basicInfoOutput}
-
-[1. 향 맡기]
+[1. 향 맡기] - "${aromaRatingValue}"
   ${aromaOutput}
 
-[2. 맛보기]
+[2. 맛보기] - "${tasteRatingValue}"
   ${tasteOutput}
 
-[3. 전체적인 느낌]
+[3. 전체적인 느낌] - "${overallRatingValue}"
   ${feelOutput}
 
 [4. 추가 메모]
-  ${additionalNoteOutput}
+  ${additionalNoteValue || '추가 메모 없음'}
 
 [5. 로스팅 추천 방향]
-  ${roastingRecOutput}
+  ${roastingRecValue || '특별히 적을 내용 없음'}
     `;
 
     // 출력
