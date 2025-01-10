@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
 [기본 정보]
 - 로스팅 날짜: ${roastingDateValue || '미입력'}
 - 커핑 날짜: ${cuppingDateValue || '미입력'}
-- 커피 이름: ${coffeeNameValue || '미입력'}
+- 커피 정보: ${coffeeNameValue || '미입력'}
 - 배출온도/시간: ${dropTempValue || '미입력'}
 - Agtron#: ${agtronValue || '미입력'}`;
 
