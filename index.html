@@ -293,6 +293,10 @@
         const additionalNoteValue = additionalNote.value.trim();
         const roastingRecValue = roastingRecommendation.value.trim();
 
+        console.log('향 선택 데이터:', aromaChoices);
+        console.log('맛 선택 데이터:', tasteChoices);
+        console.log('느낌 선택 데이터:', feelChoices);
+        
         // --- Google Sheets로 보낼 데이터 객체 생성 ---
         const dataToSend = {
             roastingDate: roastingDateValue,
