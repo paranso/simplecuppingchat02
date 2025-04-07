@@ -3,24 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>간단 커핑 앱</title>
+  <title>Simple Cupping App 02</title>
   <style>
-    body { font-family: sans-serif; background-color: #f9f9f9; padding: 20px; }
-    .container { background-color: #fff; padding: 30px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h1, h2 { text-align: center; color: #333; }
-    h2 { margin-top: 30px; }
-    .section { margin-bottom: 25px; }
-    label { display: block; margin-bottom: 8px; font-weight: bold; }
-    input[type="text"],
-    input[type="date"],
-    textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
-    textarea { resize: vertical; min-height: 80px; }
-    .options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
-    .options label { font-weight: normal; cursor: pointer; }
-    input[type="range"] { width: 100%; }
-    button { display: block; width: 100%; padding: 12px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; font-size: 1em; cursor: pointer; margin-top: 20px; }
+    body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 700px; margin: auto; background-color: #f9f9f9; }
+    .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #333; margin-bottom: 30px; }
+    h2 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; font-size: 1.2em; }
+    .section { margin-bottom: 30px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #666; }
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 0.95em;
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    
+    /* 날짜 입력 필드 레이아웃 */
+    .date-row { display: flex; gap: 15px; }
+    .date-row label { flex: 1; }
+    
+    /* 체크박스 옵션 스타일링 */
+    .options { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; font-size: 0.9em; }
+    .options label {
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 5px 10px;
+      border: 1px solid #eee;
+      border-radius: 15px;
+      background-color: #fdfdfd;
+    }
+    
+    /* 평가 슬라이더 스타일링 */
+    .rating-group { margin-top: 15px; }
+    .rating-container { display: flex; align-items: center; gap: 10px; }
+    .rating-label { font-size: 0.8em; color: #888; }
+    .rating-slider-container { flex-grow: 1; display: flex; align-items: center; gap: 8px; }
+    input[type="range"] { flex-grow: 1; cursor: pointer; }
+    .rating-value {
+      font-weight: bold;
+      font-size: 0.9em;
+      min-width: 15px;
+      text-align: center;
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    
+    /* 버튼 및 결과 영역 */
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background-color 0.2s;
+    }
     button:hover { background-color: #0056b3; }
-    pre { background-color: #f0f0f0; padding: 15px; border-radius: 4px; overflow-x: auto; }
+    #result-display {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.9em;
+      border: 1px solid #e0e0e0;
+      margin-top: 25px;
+    }
   </style>
 </head>
 <body>
@@ -30,12 +88,14 @@
     <!-- 기본 정보 입력 -->
     <div class="section" id="basic-info">
       <h2>기본 정보 입력</h2>
-      <label>로스팅 날짜
-        <input type="date" id="roasting-date">
-      </label>
-      <label>커핑 날짜
-        <input type="date" id="cupping-date">
-      </label>
+      <div class="date-row">
+        <label>로스팅 날짜
+          <input type="date" id="roasting-date">
+        </label>
+        <label>커핑 날짜
+          <input type="date" id="cupping-date">
+        </label>
+      </div>
       <label>커피 정보
         <input type="text" id="coffee-name" placeholder="예) 에티오피아 예가체프">
       </label>
@@ -50,6 +110,7 @@
     <!-- 1. 향 맡기 -->
     <div class="section" id="aroma-section">
       <h2>1. 향 맡기</h2>
+      <p>분쇄된 원두의 향을 맡고 느껴지는 향을 선택하거나 적어보세요.</p>
       <div class="options">
         <label><input type="checkbox" value="꽃향">꽃향</label>
         <label><input type="checkbox" value="과일향">과일향</label>
@@ -62,14 +123,23 @@
       <label>기타 향
         <input type="text" id="aroma-text" placeholder="기타 향 입력">
       </label>
-      <label>향 만족도
-        <input type="range" id="aroma-rating" min="1" max="5" value="3">
-      </label>
+      <div class="rating-group">
+        <label for="aroma-rating">향 만족도</label>
+        <div class="rating-container">
+          <span class="rating-label">낮음</span>
+          <div class="rating-slider-container">
+            <input type="range" id="aroma-rating" min="1" max="5" step="1" value="3">
+            <span class="rating-value">3</span>
+          </div>
+          <span class="rating-label">높음</span>
+        </div>
+      </div>
     </div>
     
     <!-- 2. 맛보기 -->
     <div class="section" id="taste-section">
       <h2>2. 맛보기</h2>
+      <p>커피를 맛보고 느껴지는 맛을 선택하거나 적어보세요.</p>
       <div class="options">
         <label><input type="checkbox" value="단맛">단맛</label>
         <label><input type="checkbox" value="신맛">신맛</label>
@@ -79,14 +149,23 @@
       <label>기타 맛
         <input type="text" id="taste-text" placeholder="기타 맛 입력">
       </label>
-      <label>맛 만족도
-        <input type="range" id="taste-rating" min="1" max="5" value="3">
-      </label>
+      <div class="rating-group">
+        <label for="taste-rating">맛 만족도</label>
+        <div class="rating-container">
+          <span class="rating-label">낮음</span>
+          <div class="rating-slider-container">
+            <input type="range" id="taste-rating" min="1" max="5" step="1" value="3">
+            <span class="rating-value">3</span>
+          </div>
+          <span class="rating-label">높음</span>
+        </div>
+      </div>
     </div>
     
     <!-- 3. 전체적인 느낌 -->
     <div class="section" id="feel-section">
       <h2>3. 전체적인 느낌</h2>
+      <p>커피의 전체적인 느낌을 선택하거나 적어보세요.</p>
       <div class="options">
         <label><input type="checkbox" value="부드러움">부드러움</label>
         <label><input type="checkbox" value="묵직함">묵직함</label>
@@ -99,21 +178,35 @@
       <label>기타 느낌
         <input type="text" id="feel-text" placeholder="기타 느낌 입력">
       </label>
-      <label>느낌 만족도
-        <input type="range" id="overall-rating" min="1" max="5" value="3">
-      </label>
+      <div class="rating-group">
+        <label for="overall-rating">느낌 만족도</label>
+        <div class="rating-container">
+          <span class="rating-label">낮음</span>
+          <div class="rating-slider-container">
+            <input type="range" id="overall-rating" min="1" max="5" step="1" value="3">
+            <span class="rating-value">3</span>
+          </div>
+          <span class="rating-label">높음</span>
+        </div>
+      </div>
     </div>
     
     <!-- 4. 추가 메모 -->
     <div class="section" id="additional-info">
       <h2>4. 추가 메모</h2>
-      <textarea id="additional-note" placeholder="추가 메모 입력"></textarea>
+      <p>추가로 기록해두고 싶은 내용이 있다면 적어보세요.</p>
+      <label for="additional-note">추가 메모
+        <textarea id="additional-note" placeholder="추가 메모 입력"></textarea>
+      </label>
     </div>
     
     <!-- 5. 로스팅 추천 방향 -->
     <div class="section" id="roasting-recommendation-section">
       <h2>5. 로스팅 추천 방향</h2>
-      <textarea id="roasting-recommendation" placeholder="로스팅 추천 입력"></textarea>
+      <p>이번에 맛본 커피를 바탕으로, 향후 로스팅에 대한 아이디어나 조정 방향을 적어보세요.</p>
+      <label for="roasting-recommendation">로스팅 추천
+        <textarea id="roasting-recommendation" placeholder="로스팅 추천 입력"></textarea>
+      </label>
     </div>
     
     <button id="save-button">결과 저장</button>
@@ -123,76 +216,97 @@
   </div>
   
   <script>
-    // 저장 버튼 클릭 시 모든 입력값을 가져와 JSON 데이터로 만들어 전송
-    document.getElementById("save-button").addEventListener("click", function() {
-      // 기본 정보
-      const roastingDate = document.getElementById("roasting-date").value;
-      const cuppingDate = document.getElementById("cupping-date").value;
-      const coffeeName = document.getElementById("coffee-name").value.trim();
-      const dropTemp = document.getElementById("drop-temp").value.trim();
-      const agtron = document.getElementById("agtron").value.trim();
+    document.addEventListener('DOMContentLoaded', function() {
+      // 버튼 및 출력 영역
+      const saveButton = document.getElementById('save-button');
+      const resultDisplay = document.getElementById('result-display');
       
-      // 1. 향 맡기
-      const aromaSection = document.getElementById("aroma-section");
-      const aromaChoices = Array.from(aromaSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-      const aromaCustomText = document.getElementById("aroma-text").value.trim();
-      const aromaRating = parseInt(document.getElementById("aroma-rating").value) || 0;
+      // 슬라이더 값 표시 설정
+      function setupRatingDisplay(ratingInput) {
+        const valueDisplay = ratingInput.closest('.rating-container').querySelector('.rating-value');
+        valueDisplay.textContent = ratingInput.value;
+        
+        ratingInput.addEventListener('input', function() {
+          valueDisplay.textContent = this.value;
+        });
+      }
       
-      // 2. 맛보기
-      const tasteSection = document.getElementById("taste-section");
-      const tasteChoices = Array.from(tasteSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-      const tasteCustomText = document.getElementById("taste-text").value.trim();
-      const tasteRating = parseInt(document.getElementById("taste-rating").value) || 0;
+      // 슬라이더 값 표시 설정 적용
+      setupRatingDisplay(document.getElementById('aroma-rating'));
+      setupRatingDisplay(document.getElementById('taste-rating'));
+      setupRatingDisplay(document.getElementById('overall-rating'));
       
-      // 3. 전체적인 느낌
-      const feelSection = document.getElementById("feel-section");
-      const feelChoices = Array.from(feelSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-      const feelCustomText = document.getElementById("feel-text").value.trim();
-      const overallRating = parseInt(document.getElementById("overall-rating").value) || 0;
-      
-      // 4. 추가 메모 & 5. 로스팅 추천
-      const additionalNote = document.getElementById("additional-note").value.trim();
-      const roastingRecommendation = document.getElementById("roasting-recommendation").value.trim();
-      
-      // 데이터 객체 구성
-      const dataToSend = {
-        roastingDate,
-        cuppingDate,
-        coffeeName,
-        dropTemp,
-        agtron,
-        aromaChoices: aromaChoices.join(", "),
-        aromaCustomText,
-        aromaRating,
-        tasteChoices: tasteChoices.join(", "),
-        tasteCustomText,
-        tasteRating,
-        feelChoices: feelChoices.join(", "),
-        feelCustomText,
-        overallRating,
-        additionalNote,
-        roastingRecommendation
-      };
-      
-      // 결과 출력 (디버깅용)
-      document.getElementById("result-display").textContent = JSON.stringify(dataToSend, null, 2);
-      
-      // Google Apps Script 웹앱으로 POST 요청 전송
-      fetch("https://script.google.com/macros/s/AKfycbyUr_KtGhArKvno9vMqUXfNHXYXRaddwqEcix5OFwyOQn0ixcpXtv_85k2oyDtambaiYw/exec", {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(dataToSend)
-      })
-      .then(response => response.json())
-      .then(result => {
-        if(result.status === "success"){
-          alert("데이터 저장 성공!");
-        } else {
-          alert("저장 오류: " + result.message);
-        }
-      })
-      .catch(error => {
-        alert("저장 중 오류 발생: " + error.message);
+      // 저장 버튼 클릭 이벤트 리스너
+      saveButton.addEventListener('click', function() {
+        // 기본 정보
+        const roastingDate = document.getElementById("roasting-date").value;
+        const cuppingDate = document.getElementById("cupping-date").value;
+        const coffeeName = document.getElementById("coffee-name").value.trim();
+        const dropTemp = document.getElementById("drop-temp").value.trim();
+        const agtron = document.getElementById("agtron").value.trim();
+        
+        // 1. 향 맡기
+        const aromaSection = document.getElementById("aroma-section");
+        const aromaChoices = Array.from(aromaSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        const aromaCustomText = document.getElementById("aroma-text").value.trim();
+        const aromaRating = parseInt(document.getElementById("aroma-rating").value) || 0;
+        
+        // 2. 맛보기
+        const tasteSection = document.getElementById("taste-section");
+        const tasteChoices = Array.from(tasteSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        const tasteCustomText = document.getElementById("taste-text").value.trim();
+        const tasteRating = parseInt(document.getElementById("taste-rating").value) || 0;
+        
+        // 3. 전체적인 느낌
+        const feelSection = document.getElementById("feel-section");
+        const feelChoices = Array.from(feelSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        const feelCustomText = document.getElementById("feel-text").value.trim();
+        const overallRating = parseInt(document.getElementById("overall-rating").value) || 0;
+        
+        // 4. 추가 메모 & 5. 로스팅 추천
+        const additionalNote = document.getElementById("additional-note").value.trim();
+        const roastingRecommendation = document.getElementById("roasting-recommendation").value.trim();
+        
+        // 데이터 객체 구성
+        const dataToSend = {
+          roastingDate,
+          cuppingDate,
+          coffeeName,
+          dropTemp,
+          agtron,
+          aromaChoices: aromaChoices.join(", "),
+          aromaCustomText,
+          aromaRating,
+          tasteChoices: tasteChoices.join(", "),
+          tasteCustomText,
+          tasteRating,
+          feelChoices: feelChoices.join(", "),
+          feelCustomText,
+          overallRating,
+          additionalNote,
+          roastingRecommendation
+        };
+        
+        // 결과 출력 (디버깅용)
+        resultDisplay.textContent = JSON.stringify(dataToSend, null, 2);
+        
+        // Google Apps Script 웹앱으로 POST 요청 전송
+        fetch("https://script.google.com/macros/s/AKfycbyUr_KtGhArKvno9vMqUXfNHXYXRaddwqEcix5OFwyOQn0ixcpXtv_85k2oyDtambaiYw/exec", {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(dataToSend)
+        })
+        .then(response => response.json())
+        .then(result => {
+          if(result.status === "success"){
+            alert("데이터 저장 성공!");
+          } else {
+            alert("저장 오류: " + result.message);
+          }
+        })
+        .catch(error => {
+          alert("저장 중 오류 발생: " + error.message);
+        });
       });
     });
   </script>
