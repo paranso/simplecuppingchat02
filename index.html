@@ -215,100 +215,135 @@
     <pre id="result-display"></pre>
   </div>
   
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 버튼 및 출력 영역
-      const saveButton = document.getElementById('save-button');
-      const resultDisplay = document.getElementById('result-display');
+ <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 버튼 및 출력 영역
+    const saveButton = document.getElementById('save-button');
+    const resultDisplay = document.getElementById('result-display');
+    
+    // 슬라이더 값 표시 설정
+    function setupRatingDisplay(ratingInput) {
+      const valueDisplay = ratingInput.closest('.rating-container').querySelector('.rating-value');
+      valueDisplay.textContent = ratingInput.value;
       
-      // 슬라이더 값 표시 설정
-      function setupRatingDisplay(ratingInput) {
-        const valueDisplay = ratingInput.closest('.rating-container').querySelector('.rating-value');
-        valueDisplay.textContent = ratingInput.value;
-        
-        ratingInput.addEventListener('input', function() {
-          valueDisplay.textContent = this.value;
-        });
-      }
+      ratingInput.addEventListener('input', function() {
+        valueDisplay.textContent = this.value;
+      });
+    }
+    
+    // 슬라이더 값 표시 설정 적용
+    setupRatingDisplay(document.getElementById('aroma-rating'));
+    setupRatingDisplay(document.getElementById('taste-rating'));
+    setupRatingDisplay(document.getElementById('overall-rating'));
+    
+    // 저장 버튼 클릭 이벤트 리스너
+    saveButton.addEventListener('click', function() {
+      // 기본 정보
+      const roastingDate = document.getElementById("roasting-date").value;
+      const cuppingDate = document.getElementById("cupping-date").value;
+      const coffeeName = document.getElementById("coffee-name").value.trim();
+      const dropTemp = document.getElementById("drop-temp").value.trim();
+      const agtron = document.getElementById("agtron").value.trim();
       
-      // 슬라이더 값 표시 설정 적용
-      setupRatingDisplay(document.getElementById('aroma-rating'));
-      setupRatingDisplay(document.getElementById('taste-rating'));
-      setupRatingDisplay(document.getElementById('overall-rating'));
+      // 1. 향 맡기
+      const aromaSection = document.getElementById("aroma-section");
+      const aromaChoices = Array.from(aromaSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const aromaCustomText = document.getElementById("aroma-text").value.trim();
+      const aromaRating = parseInt(document.getElementById("aroma-rating").value) || 0;
       
-      // 저장 버튼 클릭 이벤트 리스너
-      saveButton.addEventListener('click', function() {
-        // 기본 정보
-        const roastingDate = document.getElementById("roasting-date").value;
-        const cuppingDate = document.getElementById("cupping-date").value;
-        const coffeeName = document.getElementById("coffee-name").value.trim();
-        const dropTemp = document.getElementById("drop-temp").value.trim();
-        const agtron = document.getElementById("agtron").value.trim();
-        
-        // 1. 향 맡기
-        const aromaSection = document.getElementById("aroma-section");
-        const aromaChoices = Array.from(aromaSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-        const aromaCustomText = document.getElementById("aroma-text").value.trim();
-        const aromaRating = parseInt(document.getElementById("aroma-rating").value) || 0;
-        
-        // 2. 맛보기
-        const tasteSection = document.getElementById("taste-section");
-        const tasteChoices = Array.from(tasteSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-        const tasteCustomText = document.getElementById("taste-text").value.trim();
-        const tasteRating = parseInt(document.getElementById("taste-rating").value) || 0;
-        
-        // 3. 전체적인 느낌
-        const feelSection = document.getElementById("feel-section");
-        const feelChoices = Array.from(feelSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-        const feelCustomText = document.getElementById("feel-text").value.trim();
-        const overallRating = parseInt(document.getElementById("overall-rating").value) || 0;
-        
-        // 4. 추가 메모 & 5. 로스팅 추천
-        const additionalNote = document.getElementById("additional-note").value.trim();
-        const roastingRecommendation = document.getElementById("roasting-recommendation").value.trim();
-        
-        // 데이터 객체 구성
-        const dataToSend = {
-          roastingDate,
-          cuppingDate,
-          coffeeName,
-          dropTemp,
-          agtron,
-          aromaChoices: aromaChoices.join(", "),
-          aromaCustomText,
-          aromaRating,
-          tasteChoices: tasteChoices.join(", "),
-          tasteCustomText,
-          tasteRating,
-          feelChoices: feelChoices.join(", "),
-          feelCustomText,
-          overallRating,
-          additionalNote,
-          roastingRecommendation
-        };
-        
-        // 결과 출력 (디버깅용)
-        resultDisplay.textContent = JSON.stringify(dataToSend, null, 2);
-        
-        // Google Apps Script 웹앱으로 POST 요청 전송
-        fetch("https://script.google.com/macros/s/AKfycbyUr_KtGhArKvno9vMqUXfNHXYXRaddwqEcix5OFwyOQn0ixcpXtv_85k2oyDtambaiYw/exec", {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(dataToSend)
-        })
-        .then(response => response.json())
-        .then(result => {
-          if(result.status === "success"){
-            alert("데이터 저장 성공!");
-          } else {
-            alert("저장 오류: " + result.message);
-          }
-        })
-        .catch(error => {
-          alert("저장 중 오류 발생: " + error.message);
-        });
+      // 2. 맛보기
+      const tasteSection = document.getElementById("taste-section");
+      const tasteChoices = Array.from(tasteSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const tasteCustomText = document.getElementById("taste-text").value.trim();
+      const tasteRating = parseInt(document.getElementById("taste-rating").value) || 0;
+      
+      // 3. 전체적인 느낌
+      const feelSection = document.getElementById("feel-section");
+      const feelChoices = Array.from(feelSection.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const feelCustomText = document.getElementById("feel-text").value.trim();
+      const overallRating = parseInt(document.getElementById("overall-rating").value) || 0;
+      
+      // 4. 추가 메모 & 5. 로스팅 추천
+      const additionalNote = document.getElementById("additional-note").value.trim();
+      const roastingRecommendation = document.getElementById("roasting-recommendation").value.trim();
+      
+      // 데이터 객체 구성
+      const dataToSend = {
+        roastingDate,
+        cuppingDate,
+        coffeeName,
+        dropTemp,
+        agtron,
+        aromaChoices: aromaChoices.join(", "),
+        aromaCustomText,
+        aromaRating,
+        tasteChoices: tasteChoices.join(", "),
+        tasteCustomText,
+        tasteRating,
+        feelChoices: feelChoices.join(", "),
+        feelCustomText,
+        overallRating,
+        additionalNote,
+        roastingRecommendation
+      };
+      
+      // 결과 출력을 예쁘게 포맷팅된 한국어로 변경
+      const formattedResult = `
+【 커핑 결과 요약 】
+
+■ 기본 정보
+ - 로스팅 날짜: ${roastingDate || '미입력'}
+ - 커핑 날짜: ${cuppingDate || '미입력'}
+ - 커피 정보: ${coffeeName || '미입력'}
+ - 배출온도/시간: ${dropTemp || '미입력'}
+ - Agtron#: ${agtron || '미입력'}
+
+■ 향 평가 (${aromaRating}점)
+ - 선택한 향: ${aromaChoices.length > 0 ? aromaChoices.join(', ') : '선택 없음'}
+ - 기타 향: ${aromaCustomText || '없음'}
+
+■ 맛 평가 (${tasteRating}점)
+ - 선택한 맛: ${tasteChoices.length > 0 ? tasteChoices.join(', ') : '선택 없음'}
+ - 기타 맛: ${tasteCustomText || '없음'}
+
+■ 느낌 평가 (${overallRating}점)
+ - 선택한 느낌: ${feelChoices.length > 0 ? feelChoices.join(', ') : '선택 없음'}
+ - 기타 느낌: ${feelCustomText || '없음'}
+
+■ 추가 메모
+${additionalNote || '추가 메모 없음'}
+
+■ 로스팅 추천 방향
+${roastingRecommendation || '로스팅 추천 없음'}
+      `;
+      
+      // 결과 출력
+      resultDisplay.textContent = formattedResult;
+      
+      // 결과 영역 스타일링 추가
+      resultDisplay.style.fontFamily = "'Nanum Gothic', sans-serif";
+      resultDisplay.style.lineHeight = "1.6";
+      resultDisplay.style.color = "#333";
+      
+      // Google Apps Script 웹앱으로 POST 요청 전송
+      fetch("https://script.google.com/macros/s/AKfycbyUr_KtGhArKvno9vMqUXfNHXYXRaddwqEcix5OFwyOQn0ixcpXtv_85k2oyDtambaiYw/exec", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(dataToSend)
+      })
+      .then(response => response.json())
+      .then(result => {
+        if(result.status === "success"){
+          alert("데이터 저장 성공!");
+        } else {
+          alert("저장 오류: " + result.message);
+        }
+      })
+      .catch(error => {
+        alert("저장 중 오류 발생: " + error.message);
       });
     });
-  </script>
+  });
+</script>
 </body>
 </html>
