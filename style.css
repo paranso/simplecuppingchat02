@@ -197,3 +197,16 @@ input[type="range"]::-moz-range-thumb {
 input[type="range"]::-moz-range-thumb:hover {
   background: #1976D2;
 }
+#result-display {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.95em;
+  border: 1px solid #e0e0e0;
+  margin-top: 25px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-family: 'Nanum Gothic', sans-serif;
+  line-height: 1.6;
+}
