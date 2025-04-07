@@ -4,7 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>간단 커핑 앱</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- 여기에 style.css 파일 링크 또는 직접 스타일을 추가하세요 -->
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 700px; margin: auto; background-color: #f9f9f9; }
+    .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #333; margin-bottom: 30px; }
+    h2 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; font-size: 1.2em; }
+    .cupping-section { margin-bottom: 30px; }
+    .input-group { margin-bottom: 15px; }
+    .input-group label, label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #666; }
+    .input-group input[type="text"],
+    .input-group input[type="date"],
+    .input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box; /* 패딩 포함 크기 계산 */
+      font-size: 0.95em;
+    }
+    .input-group textarea { min-height: 80px; resize: vertical; }
+    .date-row { display: flex; gap: 15px; }
+    .date-row .input-group { flex: 1; }
+    .options { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; font-size: 0.9em;}
+    .options label { font-weight: normal; display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 5px 10px; border: 1px solid #eee; border-radius: 15px; background-color: #fdfdfd;}
+    .options label input[type="checkbox"] { margin-right: 5px; }
+    .rating-group { margin-top: 15px; }
+    .rating-container { display: flex; align-items: center; gap: 10px; }
+    .rating-label { font-size: 0.8em; color: #888; }
+    .rating-slider-container { flex-grow: 1; display: flex; align-items: center; gap: 8px; }
+    input[type="range"] { flex-grow: 1; cursor: pointer; }
+    .rating-value { font-weight: bold; font-size: 0.9em; min-width: 15px; text-align: center; background-color: #eee; padding: 2px 6px; border-radius: 3px; }
+    button#save-button {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background-color 0.2s;
+    }
+    button#save-button:hover:not(:disabled) { background-color: #0056b3; }
+    button#save-button:disabled { background-color: #a0c7e4; cursor: not-allowed; }
+    #result-area { margin-top: 25px; }
+    #result-display {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 4px;
+      white-space: pre-wrap; /* 줄바꿈과 공백 유지 */
+      word-wrap: break-word; /* 긴 단어 줄바꿈 */
+      font-size: 0.9em;
+      border: 1px solid #e0e0e0;
+    }
+    #status-message {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+        min-height: 1.2em; /* 메시지 없을 때 높이 유지 */
+    }
+    .status-success { color: green; }
+    .status-error { color: red; }
+    .status-loading { color: blue; }
+
+  </style>
 </head>
 <body>
   <div class="container">
@@ -44,14 +109,14 @@
       <div class="input-group">
         <label>향 선택 (선택)</label>
        <div class="options">
-  <label><input type="checkbox" value="꽃향" /> 꽃향</label>
-  <label><input type="checkbox" value="과일향" /> 과일향</label>
-  <label><input type="checkbox" value="허브향" /> 허브향</label>
-  <label><input type="checkbox" value="견과류향" /> 견과류향</label>
-  <label><input type="checkbox" value="카라멜향" /> 카라멜향</label>
-  <label><input type="checkbox" value="초콜릿향" /> 초콜릿향</label>
-  <label><input type="checkbox" value="기타향" /> 기타향</label>
-</div>
+         <label><input type="checkbox" value="꽃향" /> 꽃향</label>
+         <label><input type="checkbox" value="과일향" /> 과일향</label>
+         <label><input type="checkbox" value="허브향" /> 허브향</label>
+         <label><input type="checkbox" value="견과류향" /> 견과류향</label>
+         <label><input type="checkbox" value="카라멜향" /> 카라멜향</label>
+         <label><input type="checkbox" value="초콜릿향" /> 초콜릿향</label>
+         <label><input type="checkbox" value="기타향" /> 기타향</label>
+       </div>
         <input type="text" id="aroma-text" placeholder="기타 향을 직접 적어주세요" />
         <div class="rating-group">
           <label for="aroma-rating">향 만족도</label>
@@ -130,10 +195,7 @@
       <p>추가로 기록해두고 싶은 내용이 있다면 적어보세요.</p>
       <div class="input-group">
         <label for="additional-note">추가 메모</label>
-        <textarea
-          id="additional-note"
-          placeholder="(예) 숙성 시간, 물 온도"
-        ></textarea>
+        <textarea id="additional-note" placeholder="(예) 숙성 시간, 물 온도"></textarea>
       </div>
     </div>
 
@@ -143,20 +205,175 @@
       <p>이번에 맛본 커피를 바탕으로, 향후 로스팅에 대한 아이디어나 조정 방향을 적어보세요.</p>
       <div class="input-group">
         <label for="roasting-recommendation">로스팅 추천</label>
-        <textarea
-          id="roasting-recommendation"
-          placeholder="(예) 더 라이트하게 혹은 더 다크하게"
-        ></textarea>
+        <textarea id="roasting-recommendation" placeholder="(예) 더 라이트하게 혹은 더 다크하게"></textarea>
       </div>
     </div>
 
     <!-- 결과 저장 버튼 및 결과 영역 -->
     <button id="save-button">결과 저장</button>
+
+    <!-- 상태 메시지 표시 영역 (추가) -->
+    <p id="status-message"></p>
+
     <div id="result-area">
       <pre id="result-display"></pre>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script>
+    // =======================================================================
+    // !! 중요 !! 여기에 Google Apps Script 배포 후 받은 웹 앱 URL을 붙여넣으세요!
+    //            (이전 앱과 다른 URL일 수 있습니다!)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmNMjbEyblJ7lsiPTk9mh-jiUKRgEl_5ZiG5eXbqb44NnkNAtRgXIT3Uc9my3t3dnEJQ/exec';
+    // =======================================================================
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // 버튼, 출력 영역, 상태 메시지 영역
+      const saveButton = document.getElementById('save-button');
+      const resultDisplay = document.getElementById('result-display');
+      const statusMessage = document.getElementById('status-message'); // 새로 추가한 요소 선택
+
+      // --- 입력 요소들 ---
+      const roastingDateInput = document.getElementById('roasting-date');
+      const cuppingDateInput = document.getElementById('cupping-date');
+      const coffeeNameInput = document.getElementById('coffee-name');
+      const dropTempInput = document.getElementById('drop-temp');
+      const agtronInput = document.getElementById('agtron');
+      const aromaText = document.getElementById('aroma-text');
+      const aromaRating = document.getElementById('aroma-rating');
+      const tasteText = document.getElementById('taste-text');
+      const tasteRating = document.getElementById('taste-rating');
+      const feelText = document.getElementById('feel-text');
+      const overallRating = document.getElementById('overall-rating');
+      const additionalNote = document.getElementById('additional-note');
+      const roastingRecommendation = document.getElementById('roasting-recommendation');
+
+      // --- 유틸리티 함수: 평가 바 값 실시간 업데이트 ---
+      function setupRatingDisplay(ratingInput) {
+        // ratingInput 요소 자체가 없을 경우를 대비
+        if (!ratingInput) return;
+
+        const valueDisplay = ratingInput.closest('.rating-container')?.querySelector('.rating-value');
+        if (valueDisplay) { // valueDisplay 요소가 있는지 확인
+          valueDisplay.textContent = ratingInput.value;
+          ratingInput.addEventListener('input', function() {
+            valueDisplay.textContent = this.value;
+          });
+        } else {
+          console.warn("Rating value display element not found for:", ratingInput.id);
+        }
+      }
+
+      // 각 평가 바에 실시간 업데이트 적용
+      setupRatingDisplay(aromaRating);
+      setupRatingDisplay(tasteRating);
+      setupRatingDisplay(overallRating);
+
+      // --- 저장 버튼 클릭 이벤트 리스너 (핵심 수정) ---
+      saveButton.addEventListener('click', async function () { // async 추가
+        // 0. 입력값 가져오기
+        const roastingDateValue = roastingDateInput.value;
+        const cuppingDateValue = cuppingDateInput.value;
+        const coffeeNameValue = coffeeNameInput.value.trim();
+        const dropTempValue = dropTempInput.value.trim();
+        const agtronValue = agtronInput.value.trim();
+
+        const aromaChoices = Array.from(document.querySelectorAll('.cupping-section:nth-child(2) input[type="checkbox"]:checked')).map(cb => cb.value);
+        const aromaCustomText = aromaText.value.trim();
+        const aromaRatingValue = aromaRating.value;
+
+        const tasteChoices = Array.from(document.querySelectorAll('.cupping-section:nth-child(3) input[type="checkbox"]:checked')).map(cb => cb.value);
+        const tasteCustomText = tasteText.value.trim();
+        const tasteRatingValue = tasteRating.value;
+
+        const feelChoices = Array.from(document.querySelectorAll('.cupping-section:nth-child(4) input[type="checkbox"]:checked')).map(cb => cb.value);
+        const feelCustomText = feelText.value.trim();
+        const overallRatingValue = overallRating.value;
+
+        const additionalNoteValue = additionalNote.value.trim();
+        const roastingRecValue = roastingRecommendation.value.trim();
+
+        // --- Google Sheets로 보낼 데이터 객체 생성 ---
+        const dataToSend = {
+            roastingDate: roastingDateValue,
+            cuppingDate: cuppingDateValue,
+            coffeeName: coffeeNameValue,
+            dropTemp: dropTempValue,
+            agtron: agtronValue,
+            aromaChoices: aromaChoices.join(', '), // 배열을 쉼표 구분 문자열로
+            aromaCustomText: aromaCustomText,
+            aromaRating: parseInt(aromaRatingValue) || 0, // 숫자로 변환
+            tasteChoices: tasteChoices.join(', '),
+            tasteCustomText: tasteCustomText,
+            tasteRating: parseInt(tasteRatingValue) || 0,
+            feelChoices: feelChoices.join(', '),
+            feelCustomText: feelCustomText,
+            overallRating: parseInt(overallRatingValue) || 0,
+            additionalNote: additionalNoteValue,
+            roastingRecommendation: roastingRecValue
+        };
+
+        // --- 화면 출력용 문자열 생성 (기존 로직 유지) ---
+        let basicInfoOutput = `[기본 정보]\n- 로스팅 날짜: ${roastingDateValue || '미입력'}\n- 커핑 날짜: ${cuppingDateValue || '미입력'}\n- 커피 정보: ${coffeeNameValue || '미입력'}\n- 배출온도/시간: ${dropTempValue || '미입력'}\n- Agtron#: ${agtronValue || '미입력'}`;
+        let aromaOutput = (aromaChoices.length > 0 ? `선택 향: ${aromaChoices.join(', ')}` : '') + (aromaCustomText ? (aromaChoices.length > 0 ? `, 기타 향: ${aromaCustomText}` : `기타 향: ${aromaCustomText}`) : '') || '선택없음';
+        let tasteOutput = (tasteChoices.length > 0 ? `선택 맛: ${tasteChoices.join(', ')}` : '') + (tasteCustomText ? (tasteChoices.length > 0 ? `, 기타 맛: ${tasteCustomText}` : `기타 맛: ${tasteCustomText}`) : '') || '선택없음';
+        let feelOutput = (feelChoices.length > 0 ? `느낌: ${feelChoices.join(', ')}` : '') + (feelCustomText ? (feelChoices.length > 0 ? `, 기타 느낌: ${feelCustomText}` : `기타 느낌: ${feelCustomText}`) : '') || '선택없음';
+        let outputString = `${basicInfoOutput}\n\n[1. 향 맡기] - "${aromaRatingValue}"\n  ${aromaOutput}\n\n[2. 맛보기] - "${tasteRatingValue}"\n  ${tasteOutput}\n\n[3. 전체적인 느낌] - "${overallRatingValue}"\n  ${feelOutput}\n\n[4. 추가 메모]\n  ${additionalNoteValue || '추가 메모 없음'}\n\n[5. 로스팅 추천 방향]\n  ${roastingRecValue || '특별히 적을 내용 없음'}`;
+
+        // --- 결과 화면에 표시 (기존 로직) ---
+        resultDisplay.textContent = outputString.trim();
+
+        // --- Google Sheets 저장 로직 (추가) ---
+        if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === '여기에_새로_배포하고_복사한_Apps_Script_웹_앱_URL_붙여넣기') {
+            statusMessage.textContent = '오류: Google Apps Script URL이 설정되지 않았습니다.';
+            statusMessage.className = 'status-error'; // 스타일 클래스 적용
+            return;
+        }
+
+        saveButton.disabled = true; // 버튼 비활성화
+        statusMessage.textContent = 'Google Sheets에 저장 중...';
+        statusMessage.className = 'status-loading'; // 스타일 클래스 적용
+
+        try {
+            const response = await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(dataToSend)
+            });
+
+            if (!response.ok) {
+                // 서버에서 텍스트 오류 메시지를 보낼 수도 있으므로 읽어보려고 시도
+                let errorText = response.statusText;
+                try {
+                     errorText = await response.text();
+                } catch (e) { /* ignore reading error */ }
+                 throw new Error(`서버 응답 오류 (${response.status}): ${errorText}`);
+            }
+
+            const result = await response.json(); // Apps Script 응답 파싱
+
+            if (result.status === 'success') {
+                statusMessage.textContent = '성공: 데이터가 Google Sheets에 저장되었습니다.';
+                statusMessage.className = 'status-success'; // 스타일 클래스 적용
+                // 성공 시 폼 초기화 (선택 사항)
+                // document.querySelector('form')?.reset(); // 폼 태그가 있다면 초기화
+                // 또는 각 입력 필드를 수동으로 초기화
+            } else {
+                // Apps Script 내부 오류 (result.message 활용)
+                throw new Error(result.message || 'Apps Script 처리 중 오류 발생');
+            }
+
+        } catch (error) {
+            console.error('Google Sheets 저장 오류:', error);
+            statusMessage.textContent = `오류: ${error.message}`;
+            statusMessage.className = 'status-error'; // 스타일 클래스 적용
+        } finally {
+            saveButton.disabled = false; // 버튼 다시 활성화
+        }
+      });
+    });
+  </script>
 </body>
 </html>
