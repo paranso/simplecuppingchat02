@@ -97,6 +97,9 @@
           <input type="date" id="cupping-date">
         </label>
       </div>
+      <label>이름 or ID
+        <input type="text" id="user-id" placeholder="이름 또는 ID를 입력하세요">
+      </label>
       <label>커피 정보
         <input type="text" id="coffee-name" placeholder="예) 에티오피아 예가체프">
       </label>
@@ -242,6 +245,7 @@
       // 기본 정보
       const roastingDate = document.getElementById("roasting-date").value;
       const cuppingDate = document.getElementById("cupping-date").value;
+      const userId = document.getElementById("user-id").value.trim();
       const coffeeName = document.getElementById("coffee-name").value.trim();
       const dropTemp = document.getElementById("drop-temp").value.trim();
       const agtron = document.getElementById("agtron").value.trim();
@@ -272,6 +276,7 @@
       const dataToSend = {
         roastingDate,
         cuppingDate,
+        userId,
         coffeeName,
         dropTemp,
         agtron,
@@ -295,6 +300,7 @@
 ■ 기본 정보
  - 로스팅 날짜: ${roastingDate || '미입력'}
  - 추출 날짜: ${cuppingDate || '미입력'}
+ - 이름 or ID: ${userId || '미입력'}
  - 커피 정보: ${coffeeName || '미입력'}
  - 배출온도/시간: ${dropTemp || '미입력'}
  - Agtron#: ${agtron || '미입력'}
