@@ -103,11 +103,11 @@
       <label>커피 정보
         <input type="text" id="coffee-name" placeholder="예) 에티오피아 예가체프">
       </label>
-      <label>배출온도/시간
-        <input type="text" id="drop-temp" placeholder="예) 215℃ / 11분 45초">
+      <label>추출온도/시간
+        <input type="text" id="drop-temp" placeholder="예) 93℃ / 2분 30초">
       </label>
-      <label>Agtron#
-        <input type="text" id="agtron" placeholder="예) 65">
+      <label>드리퍼
+        <input type="text" id="agtron" placeholder="예) ">
       </label>
     </div>
     
@@ -208,8 +208,8 @@
     <div class="section" id="roasting-recommendation-section">
       <h2>5. 변경할 부분을 상상해 보세요</h2>
       <p>맛본 커피를 바탕으로, 향후 추출에 대한 아이디어나 조정 방향을 적어보세요.</p>
-      <label for="roasting-recommendation">드리퍼/물온도/시간 추천
-        <textarea id="roasting-recommendation" placeholder="드리퍼/물온도/시간 추천 입력"></textarea>
+      <label for="roasting-recommendation">다음 브루잉을 위한 의견
+        <textarea id="roasting-recommendation" placeholder="다음 브루잉을 위한 의견 입력"></textarea>
       </label>
     </div>
     
@@ -302,8 +302,8 @@
  - 추출 날짜: ${cuppingDate || '미입력'}
  - 이름 or ID: ${userId || '미입력'}
  - 커피 정보: ${coffeeName || '미입력'}
- - 배출온도/시간: ${dropTemp || '미입력'}
- - Agtron#: ${agtron || '미입력'}
+ - 추출온도/시간: ${dropTemp || '미입력'}
+ - 드리퍼: ${agtron || '미입력'}
 
 ■ 향 평가 (${aromaRating}점)
  - 선택한 향: ${aromaChoices.length > 0 ? aromaChoices.join(', ') : '선택 없음'}
