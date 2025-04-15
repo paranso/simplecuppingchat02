@@ -207,9 +207,9 @@
     <!-- 5. 변경할 부분을 상상해 보세요 -->
     <div class="section" id="roasting-recommendation-section">
       <h2>5. 변경할 부분을 상상해 보세요</h2>
-      <p>맛본 커피를 바탕으로, 향후 로스팅 또는 추출에 대한 아이디어나 조정 방향을 적어보세요.</p>
-      <label for="roasting-recommendation">로스팅 브루잉 추천
-        <textarea id="roasting-recommendation" placeholder="로스팅 브루잉 추천 입력"></textarea>
+      <p>맛본 커피를 바탕으로, 향후 추출에 대한 아이디어나 조정 방향을 적어보세요.</p>
+      <label for="roasting-recommendation">드리퍼/물온도/시간 추천
+        <textarea id="roasting-recommendation" placeholder="드리퍼/물온도/시간 추천 입력"></textarea>
       </label>
     </div>
     
@@ -268,7 +268,7 @@
       const feelCustomText = document.getElementById("feel-text").value.trim();
       const overallRating = parseInt(document.getElementById("overall-rating").value) || 0;
       
-      // 4. 추가 메모 & 5. 로스팅 브루잉 추천
+      // 4. 추가 메모 & 5. 드리퍼/물온도/시간 추천
       const additionalNote = document.getElementById("additional-note").value.trim();
       const roastingRecommendation = document.getElementById("roasting-recommendation").value.trim();
       
@@ -321,7 +321,7 @@
 ${additionalNote || '추가 메모 없음'}
 
 ■ 변경할 부분
-${roastingRecommendation || '로스팅 브루잉 추천 없음'}
+${roastingRecommendation || '드리퍼/물온도/시간 추천 없음'}
       `;
       
       // 결과 출력
