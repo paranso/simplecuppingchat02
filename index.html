@@ -12,7 +12,7 @@
     h2 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; font-size: 1.2em; }
     .section { margin-bottom: 30px; }
     label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #666; }
-    input[type="text"], input[type="date"], textarea {
+    input[type="text"], input[type="date"], input[type="number"], textarea {
       width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
@@ -54,6 +54,29 @@
       background-color: #eee;
       padding: 2px 6px;
       border-radius: 3px;
+    }
+    
+    /* 입력 필드 그룹 스타일링 */
+    .input-group {
+      position: relative;
+      margin-bottom: 15px;
+    }
+    .input-suffix {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 0.9em;
+    }
+    .ratio-display {
+      margin-left: 10px;
+      padding: 2px 8px;
+      background-color: #f0f8ff;
+      border-radius: 4px;
+      font-size: 0.85em;
+      border: 1px solid #cce0ff;
+      display: inline-block;
     }
     
     /* 버튼 및 결과 영역 */
@@ -108,6 +131,22 @@
       </label>
       <label>드리퍼
         <input type="text" id="agtron" placeholder="예) 하리오v60">
+      </label>
+      <div class="input-group">
+        <label for="bean-amount">원두량
+          <input type="number" id="bean-amount" placeholder="예) 20" min="0" step="0.1">
+          <span class="input-suffix">g</span>
+        </label>
+      </div>
+      <div class="input-group">
+        <label for="brew-amount">추출량
+          <input type="number" id="brew-amount" placeholder="예) 300" min="0" step="0.1">
+          <span class="input-suffix">g</span>
+        </label>
+        <div id="ratio-display" class="ratio-display" style="display: none;">비율: 1:0</div>
+      </div>
+      <label>분쇄도
+        <input type="text" id="grind-size" placeholder="예) 중간분쇄 / #25 / 220μm">
       </label>
     </div>
     
@@ -225,6 +264,29 @@
     const saveButton = document.getElementById('save-button');
     const resultDisplay = document.getElementById('result-display');
     
+    // 원두량과 추출량 입력 필드
+    const beanAmountInput = document.getElementById('bean-amount');
+    const brewAmountInput = document.getElementById('brew-amount');
+    const ratioDisplay = document.getElementById('ratio-display');
+    
+    // 비율 계산 및 표시 함수
+    function calculateRatio() {
+      const beanAmount = parseFloat(beanAmountInput.value);
+      const brewAmount = parseFloat(brewAmountInput.value);
+      
+      if (!isNaN(beanAmount) && !isNaN(brewAmount) && beanAmount > 0) {
+        const ratio = (brewAmount / beanAmount).toFixed(1);
+        ratioDisplay.textContent = `비율: 1:${ratio}`;
+        ratioDisplay.style.display = 'inline-block';
+      } else {
+        ratioDisplay.style.display = 'none';
+      }
+    }
+    
+    // 원두량과 추출량 입력 이벤트 리스너
+    beanAmountInput.addEventListener('input', calculateRatio);
+    brewAmountInput.addEventListener('input', calculateRatio);
+    
     // 슬라이더 값 표시 설정
     function setupRatingDisplay(ratingInput) {
       const valueDisplay = ratingInput.closest('.rating-container').querySelector('.rating-value');
@@ -249,6 +311,19 @@
       const coffeeName = document.getElementById("coffee-name").value.trim();
       const dropTemp = document.getElementById("drop-temp").value.trim();
       const agtron = document.getElementById("agtron").value.trim();
+      const beanAmount = document.getElementById("bean-amount").value.trim();
+      const brewAmount = document.getElementById("brew-amount").value.trim();
+      const grindSize = document.getElementById("grind-size").value.trim();
+      
+      // 비율 계산
+      let ratio = '';
+      if (beanAmount && brewAmount) {
+        const beanNum = parseFloat(beanAmount);
+        const brewNum = parseFloat(brewAmount);
+        if (!isNaN(beanNum) && !isNaN(brewNum) && beanNum > 0) {
+          ratio = `1:${(brewNum / beanNum).toFixed(1)}`;
+        }
+      }
       
       // 1. 향 맡기
       const aromaSection = document.getElementById("aroma-section");
@@ -280,6 +355,10 @@
         coffeeName,
         dropTemp,
         agtron,
+        beanAmount,
+        brewAmount,
+        ratio,
+        grindSize,
         aromaChoices: aromaChoices.join(", "),
         aromaCustomText,
         aromaRating,
@@ -295,7 +374,7 @@
       
       // 결과 출력을 예쁘게 포맷팅된 한국어로 변경
       const formattedResult = `
-【 브루잉 요약 】
+【 커핑 결과 요약 】
 
 ■ 기본 정보
  - 로스팅 날짜: ${roastingDate || '미입력'}
@@ -304,6 +383,9 @@
  - 커피 정보: ${coffeeName || '미입력'}
  - 추출온도/시간: ${dropTemp || '미입력'}
  - 드리퍼: ${agtron || '미입력'}
+ - 원두량: ${beanAmount ? beanAmount + 'g' : '미입력'}
+ - 추출량: ${brewAmount ? brewAmount + 'g' : '미입력'}${ratio ? ' (비율: ' + ratio + ')' : ''}
+ - 분쇄도: ${grindSize || '미입력'}
 
 ■ 향 평가 (${aromaRating}점)
  - 선택한 향: ${aromaChoices.length > 0 ? aromaChoices.join(', ') : '선택 없음'}
