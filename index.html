@@ -415,7 +415,7 @@ ${roastingRecommendation || '드리퍼/물온도/시간 추천 없음'}
       resultDisplay.style.color = "#333";
       
       // Google Apps Script 웹앱으로 POST 요청 전송
-      fetch("https://script.google.com/macros/s/AKfycbyUr_KtGhArKvno9vMqUXfNHXYXRaddwqEcix5OFwyOQn0ixcpXtv_85k2oyDtambaiYw/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbw7xYhPtICof54cpsMkX0r9xyYfkRPsfr2_iuFKsXqIzi1-H9S1nR277CLUNdsYYQBlHA/exec", {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(dataToSend)
