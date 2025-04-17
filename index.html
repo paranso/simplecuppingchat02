@@ -137,8 +137,11 @@
       <label>커피 정보
         <input type="text" id="coffee-name" placeholder="예) 에티오피아 예가체프">
       </label>
+      <label>물종류
+        <input type="text" id="water-type" placeholder="예) 카본필터수/생수/정수/미네랄워터">
+      </label>
       <label>물/온도
-        <input type="text" id="drop-temp" placeholder="예) 93℃">
+        <input type="text" id="drop-temp" placeholder="예) 93도">
       </label>
       <label>드리퍼/시간
         <input type="text" id="agtron" placeholder="예) 하리오v60 / 2분 30초">
@@ -322,6 +325,7 @@
       const cuppingDate = document.getElementById("cupping-date").value;
       const userId = document.getElementById("user-id").value.trim();
       const coffeeName = document.getElementById("coffee-name").value.trim();
+      const waterType = document.getElementById("water-type").value.trim();
       const dropTemp = document.getElementById("drop-temp").value.trim();
       const agtron = document.getElementById("agtron").value.trim();
       const beanAmount = document.getElementById("bean-amount").value.trim();
@@ -366,6 +370,7 @@
         cuppingDate,
         userId,
         coffeeName,
+        waterType,
         dropTemp,
         agtron,
         grindSize,
@@ -394,6 +399,7 @@
  - 추출 날짜: ${cuppingDate || '미입력'}
  - 이름 or ID: ${userId || '미입력'}
  - 커피 정보: ${coffeeName || '미입력'}
+ - 물종류: ${waterType || '미입력'}
  - 물/온도: ${dropTemp || '미입력'}
  - 드리퍼/시간: ${agtron || '미입력'}
  - 분쇄도: ${grindSize || '미입력'}
