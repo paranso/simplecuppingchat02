@@ -323,10 +323,10 @@
       const userId = document.getElementById("user-id").value.trim();
       const coffeeName = document.getElementById("coffee-name").value.trim();
       const dropTemp = document.getElementById("drop-temp").value.trim();
-      const dripperTime = document.getElementById("dripper-time").value.trim(); // <-- id 변경 및 변수명 변경
-      const grindSize = document.getElementById("grind-size").value.trim(); // <-- H열 데이터
-      const beanAmount = document.getElementById("bean-amount").value.trim(); // <-- I열 데이터
-      const brewAmount = document.getElementById("brew-amount").value.trim(); // <-- J열 데이터
+      const agtron = document.getElementById("agtron").value.trim();
+      const beanAmount = document.getElementById("bean-amount").value.trim();
+      const brewAmount = document.getElementById("brew-amount").value.trim();
+      const grindSize = document.getElementById("grind-size").value.trim();
       
       // 비율 계산
       let ratio = '';
@@ -367,7 +367,7 @@
         userId,
         coffeeName,
         dropTemp,
-        dripperTime, // <-- agtron 대신 dripperTime 사용,
+        agtron,
         grindSize,
         beanAmount,
         brewAmount,
