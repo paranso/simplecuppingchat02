@@ -434,7 +434,7 @@ ${roastingRecommendation || '다음 브루잉을 위한 의견 없음'}
       resultDisplay.style.color = "#333";
       
       // Google Apps Script 웹앱으로 POST 요청 전송
-      fetch("https://script.google.com/macros/s/AKfycbx30ERP6fScDIxBlQ75zJtmsUq_n9VemcJmo6EuMePQJFqtb8m-rymFzdiECpx_YuOMrw/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbw7xYhPtICof54cpsMkX0r9xyYfkRPsfr2_iuFKsXqIzi1-H9S1nR277CLUNdsYYQBlHA/exec", {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(dataToSend)
