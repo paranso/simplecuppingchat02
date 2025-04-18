@@ -2,9 +2,9 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Brewing Form</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Nanum Gothic', sans-serif;
@@ -19,134 +19,33 @@
       background: #fff;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 25px;
-      text-align: center;
-      color: #444;
-      letter-spacing: 1px;
-    }
-    h2 {
-      font-size: 1.2rem;
-      margin: 30px 0 15px;
-      padding-bottom: 5px;
-      border-bottom: 2px solid #eee;
-      color: #555;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #555;
-    }
-    input[type="text"],
-    input[type="date"],
-    input[type="number"],
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      margin-bottom: 15px;
-      box-sizing: border-box;
+    h1 { font-size: 1.8rem; margin-bottom: 25px; text-align: center; color: #444; letter-spacing: 1px; }
+    h2 { font-size: 1.2rem; margin: 30px 0 15px; padding-bottom: 5px; border-bottom: 2px solid #eee; color: #555; }
+    label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.95rem; color: #555; }
+    input[type="text"], input[type="date"], input[type="number"], textarea {
+      width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem; margin-bottom: 15px; box-sizing: border-box;
     }
     textarea { resize: vertical; min-height: 80px; }
-
-    .date-row, .amount-row {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 10px;
-    }
-    .date-row label,
-    .amount-row .input-group {
-      flex: 1;
-      position: relative;
-    }
-    .input-suffix {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      color: #666;
-      font-size: 0.9rem;
-    }
-    .ratio-display {
-      text-align: right;
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 15px;
-      visibility: hidden;
-    }
-    .options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    .date-row, .amount-row { display: flex; gap: 15px; margin-bottom: 10px; }
+    .date-row label, .amount-row .input-group { flex: 1; position: relative; }
+    .input-suffix { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); color: #666; font-size: 0.9rem; }
+    .ratio-display { text-align: right; font-size: 0.9rem; color: #666; margin-top: -10px; margin-bottom: 15px; visibility: hidden; }
+    .options { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
     .options label {
       flex: 0 0 calc(33.333% - 10px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: #fdfdfd;
-      font-size: 0.9rem;
-      color: #444;
-      cursor: pointer;
-      box-sizing: border-box;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px;
+      background: #fdfdfd; font-size: 0.9rem; color: #444; cursor: pointer; box-sizing: border-box;
     }
-    .options input[type="checkbox"] {
-      margin: 0;
-      width: 1.1em;
-      height: 1.1em;
-    }
-    input[type="range"] {
-      width: 100%;
-      cursor: pointer;
-    }
-    .rating-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    .rating-value {
-      min-width: 24px;
-      text-align: center;
-      background: #eee;
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-weight: 700;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 10px;
-    }
+    .options input[type="checkbox"] { margin: 0; width: 1.1em; height: 1.1em; }
+    input[type="range"] { width: 100%; cursor: pointer; }
+    .rating-container { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
+    .rating-value { min-width: 24px; text-align: center; background: #eee; border-radius: 4px; padding: 2px 6px; font-weight: 700; }
+    button { width: 100%; padding: 14px; background: #007bff; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
     button:hover { background: #0056b3; }
-    #result-display {
-      white-space: pre-wrap;
-      background: #f0f0f0;
-      padding: 15px;
-      border-radius: 6px;
-      border: 1px solid #e0e0e0;
-      margin-top: 25px;
-      font-size: 0.9rem;
-      color: #333;
-    }
+    #result-display { white-space: pre-wrap; background: #f0f0f0; padding: 15px; border-radius: 6px; border: 1px solid #e0e0e0; margin-top: 25px; font-size: 0.9rem; color: #333; }
   </style>
 </head>
 <body>
@@ -169,12 +68,12 @@
       </div>
       <div class="input-group">
         <input type="number" id="brew-amount" placeholder="추출량" min="0" step="0.1"><span class="input-suffix">g</span>
+        <div id="ratio-display" class="ratio-display">비율: 1:0</div>
       </div>
       <div class="input-group">
         <input type="text" id="grind-size" placeholder="분쇄도">
       </div>
     </div>
-    <div id="ratio-display" class="ratio-display">비율: 1:0</div>
 
     <h2>1. 향 맡기</h2>
     <div class="options" id="aroma-section">
@@ -234,11 +133,12 @@
       const brew = document.getElementById('brew-amount');
       const ratio = document.getElementById('ratio-display');
 
+      // 비율 계산
       function updateRatio() {
         const b = parseFloat(bean.value);
         const w = parseFloat(brew.value);
         if (!isNaN(b) && b > 0 && !isNaN(w)) {
-          ratio.textContent = `비율: 1:${(w/b).toFixed(1)}`;
+          ratio.textContent = `비율: 1:${(w / b).toFixed(1)}`;
           ratio.style.visibility = 'visible';
         } else {
           ratio.style.visibility = 'hidden';
@@ -247,42 +147,51 @@
       bean.addEventListener('input', updateRatio);
       brew.addEventListener('input', updateRatio);
 
+      // 슬라이더 값 표시
       document.querySelectorAll('input[type="range"]').forEach(slider => {
         const disp = slider.nextElementSibling;
         disp.textContent = slider.value;
         slider.addEventListener('input', () => disp.textContent = slider.value);
       });
 
+      // 결과 저장 클릭
       document.getElementById('save-button').addEventListener('click', () => {
         const out = [];
-        const timestamp = new Date().toISOString();
-        out.push(`Timestamp: ${timestamp}`);
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        out.push(`Timestamp: ${yyyy}-${mm}-${dd}`);
 
-        [['로스팅 날짜','roasting-date'],['추출 날짜','cupping-date'],
-         ['이름/ID','user-id'],['커피 정보','coffee-name'],
-         ['물종류','water-type'],['물온도','drop-temp'],['드리퍼/시간','agtron']].forEach(([lbl,id]) => {
-          const v = document.getElementById(id).value.trim()||'미입력'; out.push(`${lbl}: ${v}`);
+        // 기본 정보
+        [['로스팅 날짜','roasting-date'],['추출 날짜','cupping-date'],['이름/ID','user-id'],
+         ['커피 정보','coffee-name'],['물종류','water-type'],['물온도','drop-temp'],['드리퍼/시간','agtron']]
+        .forEach(([lbl,id]) => {
+          const v = document.getElementById(id).value.trim() || '미입력'; out.push(`${lbl}: ${v}`);
         });
-        [['원두량(g)','bean-amount'],['추출량(g)','brew-amount'],['분쇄도','grind-size']].forEach(([lbl,id]) => {
-          const v = document.getElementById(id).value.trim()||'미입력'; out.push(`${lbl}: ${v}`);
+        // 원두/추출/분쇄
+        [['원두량(g)','bean-amount'],['추출량(g)','brew-amount'],['분쇄도','grind-size']]
+        .forEach(([lbl,id]) => {
+          const v = document.getElementById(id).value.trim() || '미입력'; out.push(`${lbl}: ${v}`);
         });
-
+        // 향/맛/느낌
         [['1. 향 맡기','aroma-section','aroma-text','aroma-rating'],
          ['2. 맛보기','taste-section','taste-text','taste-rating'],
-         ['3. 느낌','feel-section','feel-text','overall-rating']].forEach(([t,s,txt,rt]) => {
+         ['3. 느낌','feel-section','feel-text','overall-rating']]
+        .forEach(([t,s,txt,rt]) => {
           const sec = document.getElementById(s);
-          const sel = Array.from(sec.querySelectorAll('input[type="checkbox"]:checked'))
-                         .map(cb=>cb.value).join(', ')||'없음';
-          const oth = document.getElementById(txt).value.trim()||'없음';
+          const sels = Array.from(sec.querySelectorAll('input[type="checkbox"]:checked'))
+                       .map(cb => cb.value).join(', ') || '없음';
+          const oth = document.getElementById(txt).value.trim() || '없음';
           const score = document.getElementById(rt).value;
           out.push(`${t} (${score}점)`);
-          out.push(` - 선택: ${sel}`);
+          out.push(` - 선택: ${sels}`);
           out.push(` - 기타: ${oth}`);
         });
-
+        // 메모 및 의견
         [['추가 메모','additional-note'],['다음 브루잉 의견','roasting-recommendation']]
         .forEach(([lbl,id]) => {
-          const v = document.getElementById(id).value.trim()||'없음'; out.push(`${lbl}: ${v}`);
+          const v = document.getElementById(id).value.trim() || '없음'; out.push(`${lbl}: ${v}`);
         });
 
         document.getElementById('result-display').textContent = out.join('\n');
