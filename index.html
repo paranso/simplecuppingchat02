@@ -142,6 +142,9 @@
   </div>
 
   <script>
+    // 여기에 복사한 웹앱 URL을 붙여넣으세요 ↓
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyZo5VGT4bYg8YJ0gOCYPn8HB2qJW-70ce81hoEs7g0yRBaqMm-SqY9w-7shc_mmB9ZDA/exec';
+
     document.addEventListener('DOMContentLoaded', () => {
       const bean     = document.getElementById('bean-amount');
       const brew     = document.getElementById('brew-amount');
@@ -162,6 +165,7 @@
       });
 
       document.getElementById('save-button').addEventListener('click', () => {
+        // 1) 화면에 결과 표시
         const out = [];
         const today = new Date();
         const yyyy = today.getFullYear();
@@ -169,38 +173,81 @@
         const dd   = String(today.getDate()).padStart(2, '0');
         out.push(`Timestamp: ${yyyy}-${mm}-${dd}`);
 
-        [['로스팅 날짜', 'roasting-date'], ['추출 날짜', 'cupping-date'], ['이름/ID', 'user-id'],
-         ['커피 정보', 'coffee-name'], ['드리퍼', 'dripper'], ['물종류', 'water-type'],
-         ['분쇄도', 'grind-size'], ['물온도', 'drop-temp'], ['인퓨전시간', 'infusion-time'],
-         ['총시간', 'total-time']].forEach(([lbl, id]) => {
+        // 기본 정보
+        [['로스팅 날짜','roasting-date'],['추출 날짜','cupping-date'],['이름/ID','user-id'],
+         ['커피 정보','coffee-name'],['드리퍼','dripper'],['물종류','water-type'],
+         ['분쇄도','grind-size'],['물온도','drop-temp'],['인퓨전시간','infusion-time'],
+         ['총시간','total-time']].forEach(([lbl,id]) => {
           const v = document.getElementById(id).value.trim() || '미입력';
           out.push(`${lbl}: ${v}`);
         });
 
-        [['원두량(g)', 'bean-amount'], ['추출량(g)', 'brew-amount'], ['비율', 'ratio-display']].forEach(([lbl, id]) => {
+        // 원두/추출/비율
+        [['원두량(g)','bean-amount'],['추출량(g)','brew-amount'],['비율','ratio-display']].forEach(([lbl,id]) => {
           const v = document.getElementById(id).textContent || '미입력';
           out.push(`${lbl}: ${v}`);
         });
 
-        [['1. 향 맡기', 'aroma-section', 'aroma-text', 'aroma-rating'],
-         ['2. 맛보기', 'taste-section', 'taste-text', 'taste-rating'],
-         ['3. 느낌', 'feel-section', 'feel-text', 'overall-rating']].forEach(([t, s, txt, rt]) => {
-          const sec = document.getElementById(s);
+        // 향/맛/느낌
+        [['1. 향 맡기','aroma-section','aroma-text','aroma-rating'],
+         ['2. 맛보기','taste-section','taste-text','taste-rating'],
+         ['3. 느낌','feel-section','feel-text','overall-rating']].forEach(([t,s,txt,rt]) => {
+          const sec  = document.getElementById(s);
           const sels = Array.from(sec.querySelectorAll('input[type="checkbox"]:checked'))
-                          .map(cb => cb.value).join(', ') || '없음';
-          const oth = document.getElementById(txt).value.trim() || '없음';
-          const sc = document.getElementById(rt).value;
+                           .map(cb=>cb.value).join(', ')||'없음';
+          const oth = document.getElementById(txt).value.trim()||'없음';
+          const sc  = document.getElementById(rt).value;
           out.push(`${t} (${sc}점)`);
           out.push(` - 선택: ${sels}`);
           out.push(` - 기타: ${oth}`);
         });
 
-        [['4. 추가 메모', 'additional-note'], ['5. 다음 브루잉 의견', 'roasting-recommendation']].forEach(([lbl, id]) => {
-          const v = document.getElementById(id).value.trim() || '없음';
+        // 메모/의견
+        [['4. 추가 메모','additional-note'],['5. 다음 브루잉 의견','roasting-recommendation']].forEach(([lbl,id]) => {
+          const v = document.getElementById(id).value.trim()||'없음';
           out.push(`${lbl}: ${v}`);
         });
 
         document.getElementById('result-display').textContent = out.join('\n');
+
+        // 2) 구글 스프레드시트에 저장
+        fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify({
+            timestamp: `${yyyy}-${mm}-${dd}`,
+            roastingDate:  document.getElementById('roasting-date').value,
+            cuppingDate:   document.getElementById('cupping-date').value,
+            userId:        document.getElementById('user-id').value.trim(),
+            coffeeName:    document.getElementById('coffee-name').value.trim(),
+            dripper:       document.getElementById('dripper').value.trim(),
+            waterType:     document.getElementById('water-type').value.trim(),
+            grindSize:     document.getElementById('grind-size').value.trim(),
+            dropTemp:      document.getElementById('drop-temp').value.trim(),
+            infusionTime:  document.getElementById('infusion-time').value.trim(),
+            totalTime:     document.getElementById('total-time').value.trim(),
+            beanAmount:    document.getElementById('bean-amount').value.trim(),
+            brewAmount:    document.getElementById('brew-amount').value.trim(),
+            ratio:         document.getElementById('ratio-display').textContent,
+            aromaChoices:  Array.from(document.querySelectorAll('#aroma-section input:checked')).map(c=>c.value).join(', '),
+            aromaCustomText: document.getElementById('aroma-text').value.trim(),
+            aromaRating:     document.getElementById('aroma-rating').value,
+            tasteChoices:    Array.from(document.querySelectorAll('#taste-section input:checked')).map(c=>c.value).join(', '),
+            tasteCustomText: document.getElementById('taste-text').value.trim(),
+            tasteRating:     document.getElementById('taste-rating').value,
+            feelChoices:     Array.from(document.querySelectorAll('#feel-section input:checked')).map(c=>c.value).join(', '),
+            feelCustomText:  document.getElementById('feel-text').value.trim(),
+            overallRating:   document.getElementById('overall-rating').value,
+            additionalNote:  document.getElementById('additional-note').value.trim(),
+            roastingRecommendation: document.getElementById('roasting-recommendation').value.trim()
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(res.status==='success') alert('스프레드시트 저장 성공!');
+          else                    alert('저장 오류: '+res.message);
+        })
+        .catch(err => alert('통신 오류: '+err));
       });
     });
   </script>
